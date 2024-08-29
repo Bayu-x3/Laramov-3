@@ -29,7 +29,20 @@ class CastController extends Controller
      */
     public function store(StoreCastRequest $request)
     {
-        //
+        // validasi data request
+        $request->validate([
+            'name' => 'required|string|max:50',
+        ]);
+
+        // Membuat data cast baru
+        $cast = Cast::create([
+            'name' => $request->name,
+        ]);
+
+        return response()->json([
+            'message' => 'Cast created successfully',
+            'data' => $cast
+        ], 201);
     }
 
     /**
