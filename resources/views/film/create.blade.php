@@ -3,6 +3,9 @@
 
 @include('templates.component.head')
 
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
 <body>
 <!-- header -->
 @include('templates.component.header')
@@ -26,7 +29,7 @@
 <!-- /w3l-medile-movies-grids -->
 <div class="container mt-5">
 	<h1 class="text-center mb-4">Form Create</h1>
-	<form action="{{ route('film.store') }}" method="POST">
+	<form id="filmForm" action="{{ route('film.store') }}" method="POST">
 		@csrf
 		<div class="form-group">
 			<label for="title">Masukan Judul</label>
@@ -60,8 +63,10 @@
 <!-- footer -->
 @include('templates.component.footer')
 <!-- //footer -->
-<!-- Bootstrap Core JavaScript -->
-<script src="{{ asset('template/js/bootstrap.min.js') }}"></script>
+
+<!-- sweet alert2 js  -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
 <script>
 	$(document).ready(function(){
 		$(".dropdown").hover(            
@@ -74,9 +79,73 @@
 				$(this).toggleClass('open');       
 			}
 		);
+
+		$('#filmForm').on('submit', function(e) {
+			e.preventDefault(); // buat nyegah pengiriman form secara default 
+			var isValid = true;
+			var errors = [];
+
+			if ($('#title').val().trim() === '') {
+				isValid = false;
+				errors.push("Judul");
+			}
+			if ($('#sinopsis').val().trim() === '') {
+				isValid = false;
+				errors.push("Sinopsis");
+			}
+			if ($('#year').val().trim() === '') {
+				isValid = false;
+				errors.push("Tahun");
+			}
+			if ($('#poster').val().trim() === '') {
+				isValid = false;
+				errors.push("Link Poster");
+			}
+			if ($('#genre_id').val().trim() === '') {
+				isValid = false;
+				errors.push("Genre");
+			}
+			
+			if (!isValid) {
+				var errorText = "Tolong isi kolom:\n" + errors.join(", ");
+				Swal.fire({
+					title: 'Peringatan!',
+					text: errorText,
+					icon: 'error',
+					confirmButtonText: 'Tutup'
+				});
+			} else {
+				// Submit menggunakan AJAX (Asynchronous JavaScript and XML) untuk mengirim dan menerima data dari server tanpa memuat ulang halaman, salah satu kegunaan nya web lebih responsif 
+				$.ajax({
+					url: $(this).attr('action'),
+					type: 'POST',
+					data: $(this).serialize(),
+					success: function(response) { //fungsi ini dipanggil jika permintaan berhasil 
+						Swal.fire({
+							title: 'Berhasil!',
+							text: 'Data Film berhasil ditambahkan!',
+							icon: 'success',
+							confirmButtonText: 'Tutup'
+						}).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "{{ route('film.index') }}"; // Redirect ke halaman film.index
+                                }
+                            });
+					},
+					error: function(xhr) { //fungsi ini dipanggil jika permintaan gagal 
+						Swal.fire({
+							title: 'Error!',
+							text: 'Terjadi kesalahan saat menambahkan film.',
+							icon: 'error',
+							confirmButtonText: 'Tutup'
+						});
+					}
+				});
+			}
+		});
 	});
 </script>
-<!-- //Bootstrap Core JavaScript -->
+
 <!-- here stars scrolling icon -->
 <script type="text/javascript">
 	$(document).ready(function() {

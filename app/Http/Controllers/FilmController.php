@@ -5,7 +5,8 @@ use App\Models\{
     Film,
     Genre,
     Kritik,
-    Peran,
+    Peran,  
+    
 };
 use App\Http\Requests\StoreFilmRequest;
 use App\Http\Requests\UpdateFilmRequest;
@@ -18,6 +19,9 @@ class FilmController extends Controller
      */
     public function index()
     {
+        $films = Film::all();
+        $genres = Genre::all();
+        return view('film.index', compact('films','genres'));
     }
 
     public function movies()

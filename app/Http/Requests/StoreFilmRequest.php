@@ -22,7 +22,7 @@ class StoreFilmRequest extends FormRequest
     public function rules(): array
 {
     return [
-        'title' => 'required',
+        'title' => 'required',                                                      
         'sinopsis' => 'required',
         'year' => 'required|integer',
         'poster' => 'required',
@@ -30,3 +30,4 @@ class StoreFilmRequest extends FormRequest
     ];
 }
 }
+    
