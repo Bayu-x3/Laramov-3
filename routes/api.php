@@ -10,3 +10,4 @@ Route::get('/user', function (Request $request) {
 
 
 Route::apiResource('/film',FilmController::class);
+// Route::apiResource('/film/{id}',FilmController::class);

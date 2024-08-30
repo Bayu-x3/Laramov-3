@@ -15,11 +15,19 @@ class FilmResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
-            'title' => $this->title,
-            'sinopsis' => $this->sinopsis,
-            'year' => $this->year,
-            'genre' => $this->genre_id,
-  ];
-}
+            'id'        => $this->id,
+            'title'     => $this->title,
+            'sinopsis'  => $this->sinopsis,
+            'year'      => $this->year,
+            'poster'    => $this->poster,
+            'genre'     => $this->genre->name,
+            'komentar'  => $this->kritiks->pluck('comment'),
+            'peran'     => $this->perans->map(function($peran) {
+                return [
+                    'actor' => $peran->actor,
+                    'cast'  => $peran->cast->name,
+                ];
+            }),
+        ];
+    }
 }
