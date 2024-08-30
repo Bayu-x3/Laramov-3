@@ -22,7 +22,7 @@ class FilmResource extends JsonResource
             'year'=> $this->year,
             'poster'=> $this->poster,
             'genre_id'=> $this->genre_id,
-            'genre_name '=> $this->name,
+            'genre_name '=> $this->genre->name,
             'kritiks' => $this->kritiks->pluck('comment'), 
             'actor' => $this->perans->map(function($peran){
                 return [
@@ -33,4 +33,3 @@ class FilmResource extends JsonResource
         ];
     }
 }
-
